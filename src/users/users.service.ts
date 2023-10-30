@@ -12,19 +12,55 @@ export class UsersService {
   ) {}
 
   public async create(createUserDto: CreateUserDto) {
-    console.log('usersRepository', this.usersRepository);
     const result = await this.usersRepository.create(createUserDto);
+    return result;
   }
 
   public async findAll(): Promise<User[]> {
     const users = await this.usersRepository.find();
-    console.log('users', users);
     return users;
   }
 
   public async findOne(id: number): Promise<User | null> {
-    return await this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        role: true,
+      },
+    });
   }
+
+  public async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({
+      where: {
+        email,
+      },
+      relations: {
+        role: true,
+      },
+    });
+  }
+
+  public async getCredsByEmail(
+    email: string,
+  ): Promise<Pick<User, 'password' | 'id' | 'role'> | null> {
+    return this.usersRepository.findOne({
+      where: {
+        email,
+      },
+      relations: {
+        role: true,
+      },
+      select: {
+        password: true,
+        id: true,
+      },
+    });
+  }
+
+  public async findFullByEmail(email: string) {}
 
   public async update(
     id: number,

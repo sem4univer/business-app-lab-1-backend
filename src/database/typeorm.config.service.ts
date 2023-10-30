@@ -10,6 +10,7 @@ import { Role } from '../users/entities/role.entity';
 import { User } from '../users/entities/user.entity';
 
 import { BaseSeeding1698593212716 } from './migrations/1698593212716-BaseSeeding';
+import { UserSeed1698613518645 } from './migrations/1698613518645-UserSeed';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -24,7 +25,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.configService.get('DATABASE_NAME'),
       synchronize: true,
       entities: [Country, Office, Role, User],
-      migrations: [BaseSeeding1698593212716],
+      migrations: [BaseSeeding1698593212716, UserSeed1698613518645],
       migrationsTableName: 'migrations',
       migrationsRun: true,
       namingStrategy: new SnakeNamingStrategy(),
