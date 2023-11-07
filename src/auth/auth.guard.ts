@@ -5,11 +5,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
-import { Request } from 'express';
-import { JwtUserPayload } from './auth.interfaces';
-import { UsersService } from '@users/users.service';
+import { UsersService } from '../users/users.service';
 import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
+
+import { jwtConstants } from './constants';
+import { JwtUserPayload } from './auth.interfaces';
 import { IS_PUBLIC_KEY } from './auth.decorators';
 
 @Injectable()

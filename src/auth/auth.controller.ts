@@ -11,7 +11,7 @@ import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { Public } from './auth.decorators';
 import { AuthService } from './auth.service';
 import { signInResponseSchema, SignInUserDto } from './dto/sign-in-user.dto';
-import { User } from '@users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {

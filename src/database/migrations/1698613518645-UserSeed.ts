@@ -2,9 +2,10 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { In, MigrationInterface, QueryRunner } from 'typeorm';
 import { parse } from 'csv-parse/sync';
-import { Role } from '@users/entities/role.entity';
-import { User } from '@users/entities/user.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+
+import { Role } from '../../users/entities/role.entity';
+import { User } from '../../users/entities/user.entity';
 
 export class UserSeed1698613518645 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

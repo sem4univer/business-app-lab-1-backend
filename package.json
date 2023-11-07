@@ -7,10 +7,12 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "ci:prepare": "npm-run-all ci:prepare:*",
+    "ci:prepare:certificate": "mkdir -p /usr/.postgresql && wget \"https://storage.yandexcloud.net/cloud-certs/CA.pem\"  --output-document /usr/.postgresql/root.crt && chmod 0600 /usr/.postgresql/root.crt",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run start:dev",
     "start:dev": "npm-run-all --parallel start:dev:*",
-    "start:dev:nest": "nest start --watch --exec 'node -r tsconfig-paths/register -r ts-node/register ./src/main.ts'",
+    "start:dev:nest": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -29,6 +31,7 @@
     "@nestjs/jwt": "^10.1.1",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.1.13",
+    "@nestjs/cli": "^10.2.1",
     "@nestjs/typeorm": "^10.0.0",
     "@types/bcrypt": "^5.0.1",
     "csv-parse": "^5.5.2",
@@ -42,7 +45,6 @@
     "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",

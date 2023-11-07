@@ -17,8 +17,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "moduleResolution": "Node",
-    "paths": {
-      "@users/*": ["src/users/*"]
-    }
   }
 }

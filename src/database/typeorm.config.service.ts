@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { PostgresConnectionCredentialsOptions } from 'typeorm/driver/postgres/PostgresConnectionCredentialsOptions';
+import * as fs from 'node:fs';
 
 import { Country } from '../users/entities/country.entity';
 import { Office } from '../users/entities/office.entity';
@@ -16,6 +18,19 @@ import { UserSeed1698613518645 } from './migrations/1698613518645-UserSeed';
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
   createTypeOrmOptions(): DataSourceOptions {
+    let additionalConfig: Partial<
+      Pick<PostgresConnectionCredentialsOptions, 'ssl'>
+    > = {};
+    const isProduction = this.configService.get('NODE_ENV') === 'production';
+    if (isProduction) {
+      additionalConfig = {
+        ssl: {
+          rejectUnauthorized: true,
+          ca: fs.readFileSync('/usr/.postgresql/root.crt').toString(),
+        },
+      };
+    }
+
     return {
       type: 'postgres',
       host: this.configService.get('DATABASE_HOST'),
@@ -29,6 +44,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'migrations',
       migrationsRun: true,
       namingStrategy: new SnakeNamingStrategy(),
+      ...additionalConfig,
     };
   }
 }

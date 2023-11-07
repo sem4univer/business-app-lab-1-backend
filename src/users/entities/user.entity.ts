@@ -9,7 +9,7 @@ import {
 
 import { Country } from './country.entity';
 import { Role } from './role.entity';
-import { getHashedPassword } from '@users/users.utils';
+import { getHashedPassword } from '../users.utils';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
