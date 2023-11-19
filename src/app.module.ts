@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { RolesGuard } from './auth/role/roles.guard';
 import { AuthGuard } from './auth/auth.guard';
 import { SharedModule } from './shared/shared.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SharedModule } from './shared/shared.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [

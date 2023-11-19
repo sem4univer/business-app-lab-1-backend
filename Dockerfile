@@ -11,4 +11,6 @@ COPY  . .
 
 RUN npm run build
 
+RUN npm run schema:sync
+
 CMD [ "node", "dist/main.js" ]
