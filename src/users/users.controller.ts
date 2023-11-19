@@ -1,3 +1,5 @@
+import { BaseUserService } from './../shared/base-user.service';
+import { AuthService } from '../auth/auth.service';
 import {
   Controller,
   Get,
@@ -9,20 +11,24 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../auth/role/roles.decorators';
 import { RoleName } from '../auth/role/role.enum';
+import { UserRelationService } from './user-relation.service';
 
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: BaseUserService,
+    private readonly authService: AuthService,
+    private readonly userRelationService: UserRelationService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.authService.signUp(createUserDto);
   }
 
   @Get()
@@ -31,16 +37,36 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('offices')
+  @Roles(RoleName.Admin)
+  getAllOffices() {
+    return this.userRelationService.getAllOffices();
+  }
+
+  @Get('roles')
+  @Roles(RoleName.Admin)
+  getAllRoles() {
+    console.log('roles');
+    return this.userRelationService.getAllRoles();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
+  @Get(':id/authEvent')
+  getUserEvents(@Param('id') id: string) {
+    return this.authService.getAuthEvents(+id);
+  }
+
+  @Roles(RoleName.Admin)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @Roles(RoleName.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

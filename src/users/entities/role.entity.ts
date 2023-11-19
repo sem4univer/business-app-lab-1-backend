@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 /**
  * @docs https://drive.google.com/drive/folders/1DtKeBMOdSSp1uey8nriTZxPK7h_6YY_c
@@ -14,4 +21,8 @@ export class Role {
   @ApiProperty()
   @Column()
   title: string;
+
+  @OneToMany((type) => User, (user) => user.role)
+  @JoinColumn()
+  user: User;
 }

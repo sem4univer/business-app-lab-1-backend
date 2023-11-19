@@ -2,6 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class BaseSeeding1698593212716 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    console.log('start');
     await queryRunner.query(
       `
         INSERT INTO country VALUES (1,'Afghanistan'),
@@ -207,13 +208,15 @@ export class BaseSeeding1698593212716 implements MigrationInterface {
       (3,52,'Cairo','252-224-8525','David Johns'),
       (4,13,'Bahrain','542-227-5825','Katie Ballmer'),
       (5,142,'Doha','758-278-9597','Ariel Levy'),
-      (6,152,'Riyadh','285-285-1474','Andrew Hobart')
+      (6,152,'Riyadh','285-285-1474','Andrew Hobart');
     `);
 
     await queryRunner.query(`
       INSERT INTO role VALUES (1,'Administrator'),
       (2,'User');
     `);
+
+    console.log('stop');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {}

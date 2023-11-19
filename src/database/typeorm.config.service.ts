@@ -10,9 +10,16 @@ import { Country } from '../users/entities/country.entity';
 import { Office } from '../users/entities/office.entity';
 import { Role } from '../users/entities/role.entity';
 import { User } from '../users/entities/user.entity';
+import { AuthEvent } from '../auth/auth-event/entities/auth-event.entity';
+
+import { Schedule } from './../schedule/entities/schedule.entity';
+import { Route } from './../schedule/entities/route.entity';
+import { Aircraft } from './../schedule/entities/aircraft.entity';
+import { Airport } from '../schedule/entities/airport.entity';
 
 import { BaseSeeding1698593212716 } from './migrations/1698593212716-BaseSeeding';
 import { UserSeed1698613518645 } from './migrations/1698613518645-UserSeed';
+import { ScheduleSeed1700379864857 } from './migrations/1700379864857-schedule-seed';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -39,8 +46,22 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
       synchronize: true,
-      entities: [Country, Office, Role, User],
-      migrations: [BaseSeeding1698593212716, UserSeed1698613518645],
+      entities: [
+        Country,
+        Office,
+        Role,
+        User,
+        AuthEvent,
+        Aircraft,
+        Airport,
+        Route,
+        Schedule,
+      ],
+      migrations: [
+        BaseSeeding1698593212716,
+        UserSeed1698613518645,
+        ScheduleSeed1700379864857,
+      ],
       migrationsTableName: 'migrations',
       migrationsRun: true,
       namingStrategy: new SnakeNamingStrategy(),

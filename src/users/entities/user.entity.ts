@@ -11,6 +11,7 @@ import { Country } from './country.entity';
 import { Role } from './role.entity';
 import { getHashedPassword } from '../users.utils';
 import { ApiProperty } from '@nestjs/swagger';
+import { Office } from './office.entity';
 
 /**
  * @docs https://drive.google.com/drive/folders/1DtKeBMOdSSp1uey8nriTZxPK7h_6YY_c
@@ -52,7 +53,31 @@ export class User {
   @ManyToOne((type) => Country)
   @JoinColumn()
   @ApiProperty({ nullable: true })
-  country: Country;
+  country?: Country;
+
+  @ManyToOne((type) => Office)
+  @JoinColumn()
+  @ApiProperty()
+  office: Office;
+
+  @Column({ default: false })
+  @ApiProperty()
+  isBlocked: boolean;
+
+  @Column({ default: null, nullable: true })
+  @ApiProperty({ default: null, nullable: true })
+  lastFailedLoginTime?: Date;
+
+  @Column({ default: null, nullable: true })
+  @ApiProperty({
+    description:
+      'Time for waiting before login api will be work in miliseconds',
+  })
+  timeToWaitBeforeLoginMs?: number;
+
+  @Column({ default: null, nullable: true })
+  @ApiProperty()
+  lastFailedLoginCount?: number;
 
   @BeforeInsert()
   async hashPassword() {

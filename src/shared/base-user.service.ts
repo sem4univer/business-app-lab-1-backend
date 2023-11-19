@@ -1,12 +1,12 @@
+import { UpdateUserDto } from './../users/dto/update-user.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { User } from '../users/entities/user.entity';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @Injectable()
-export class UsersService {
+export class BaseUserService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
@@ -17,7 +17,13 @@ export class UsersService {
   }
 
   public async findAll(): Promise<User[]> {
-    const users = await this.usersRepository.find();
+    const users = await this.usersRepository.find({
+      relations: {
+        role: true,
+        office: true,
+        country: true,
+      },
+    });
     return users;
   }
 
@@ -28,6 +34,8 @@ export class UsersService {
       },
       relations: {
         role: true,
+        office: true,
+        country: true,
       },
     });
   }
@@ -39,13 +47,15 @@ export class UsersService {
       },
       relations: {
         role: true,
+        office: true,
+        country: true,
       },
     });
   }
 
   public async getCredsByEmail(
     email: string,
-  ): Promise<Pick<User, 'password' | 'id' | 'role'> | null> {
+  ): Promise<Pick<User, 'password' | 'id' | 'role' | 'isBlocked'> | null> {
     return this.usersRepository.findOne({
       where: {
         email,
@@ -56,11 +66,13 @@ export class UsersService {
       select: {
         password: true,
         id: true,
+        isBlocked: true,
+        lastFailedLoginTime: true,
+        lastFailedLoginCount: true,
+        timeToWaitBeforeLoginMs: true,
       },
     });
   }
-
-  public async findFullByEmail(email: string) {}
 
   public async update(
     id: number,

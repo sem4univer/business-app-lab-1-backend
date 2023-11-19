@@ -21,14 +21,20 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @ApiOkResponse({ schema: signInResponseSchema })
-  signIn(@Body() signInDto: SignInUserDto) {
+  public async signIn(@Body() signInDto: SignInUserDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 
   @Get('profile')
   @ApiOkResponse({ type: User })
   @ApiBearerAuth()
-  getProfile(@Request() req) {
+  public async getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get('logout')
+  @ApiBearerAuth()
+  public async logout(@Request() req) {
+    await this.authService.logout(req.user);
   }
 }

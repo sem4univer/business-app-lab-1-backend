@@ -1,3 +1,4 @@
+import { BaseUserService } from './../shared/base-user.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -5,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 
@@ -17,7 +17,7 @@ import { IS_PUBLIC_KEY } from './auth.decorators';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private usersService: UsersService,
+    private usersService: BaseUserService,
     private reflector: Reflector,
   ) {}
 
