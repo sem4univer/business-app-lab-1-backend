@@ -8,7 +8,13 @@ import { ScheduleService } from './schedule.service';
 import { ScheduleController } from './schedule.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Aircraft, Airport, Route, Schedule])],
+  imports: [
+    TypeOrmModule.forFeature([Aircraft, Airport, Route, Schedule], {
+      logging: 'all',
+      type: 'postgres',
+      logger: 'file',
+    }),
+  ],
   providers: [ScheduleService],
   controllers: [ScheduleController],
   exports: [ScheduleService],

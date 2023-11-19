@@ -54,6 +54,8 @@ TL;DR
   cut -f2 -d':' | \
   tr -d '"' | \
   sudo docker login --username iam --password-stdin cr.yandex
+
+  
   export REGISTRY_ID=crp9pfdb3i7rpr96eklp
   sudo docker pull cr.yandex/${REGISTRY_ID}/lab-1:tag-${NEW_TAG_NUMBER}
 

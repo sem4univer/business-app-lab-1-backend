@@ -64,6 +64,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       ],
       migrationsTableName: 'migrations',
       migrationsRun: true,
+      logging: 'all',
+      logger: 'file',
       namingStrategy: new SnakeNamingStrategy(),
       ...additionalConfig,
     };
