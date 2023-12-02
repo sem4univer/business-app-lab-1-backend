@@ -1,8 +1,11 @@
 import {
+  Body,
   Controller,
   FileTypeValidator,
   Get,
+  Param,
   ParseFilePipe,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -10,6 +13,9 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ScheduleService } from './schedule.service';
+import { Roles } from 'src/auth/role/roles.decorators';
+import { RoleName } from 'src/auth/role/role.enum';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 
 @ApiBearerAuth()
 @Controller('schedules')
@@ -46,5 +52,14 @@ export class ScheduleController {
     file: Express.Multer.File,
   ) {
     return this.scheduleService.handleCsv(file.buffer);
+  }
+
+  // @Roles(RoleName.Admin)
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateScheduleDto: UpdateScheduleDto,
+  ) {
+    return this.scheduleService.update(+id, updateScheduleDto);
   }
 }

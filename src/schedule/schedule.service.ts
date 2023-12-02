@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository, In } from 'typeorm';
+import { DeepPartial, Repository, In, UpdateResult } from 'typeorm';
 import { parse } from 'csv-parse/sync';
 
 import { Schedule } from './entities/schedule.entity';
@@ -8,6 +8,7 @@ import { CsvFileLine, columnsName, filterCsvLine } from './schedule.model';
 import { Aircraft } from './entities/aircraft.entity';
 import { Route } from './entities/route.entity';
 import { Airport } from './entities/airport.entity';
+import { UpdateScheduleDto } from './dto/update-schedule.dto';
 
 @Injectable()
 export class ScheduleService {
@@ -132,5 +133,12 @@ export class ScheduleService {
       aircraft,
       route,
     };
+  }
+
+  public async update(
+    id: number,
+    updateUserDto: UpdateScheduleDto,
+  ): Promise<UpdateResult> {
+    return await this.scheduleRepository.update(id, updateUserDto);
   }
 }
