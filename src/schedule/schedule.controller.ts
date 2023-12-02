@@ -13,8 +13,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ScheduleService } from './schedule.service';
-import { Roles } from 'src/auth/role/roles.decorators';
-import { RoleName } from 'src/auth/role/role.enum';
+import { Roles } from '../auth/role/roles.decorators';
+import { RoleName } from '../auth/role/role.enum';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 
 @ApiBearerAuth()
@@ -54,7 +54,7 @@ export class ScheduleController {
     return this.scheduleService.handleCsv(file.buffer);
   }
 
-  // @Roles(RoleName.Admin)
+  @Roles(RoleName.Admin)
   @Patch(':id')
   update(
     @Param('id') id: string,
