@@ -7,6 +7,7 @@ import {
   ParseFilePipe,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { ScheduleService } from './schedule.service';
 import { Roles } from '../auth/role/roles.decorators';
 import { RoleName } from '../auth/role/role.enum';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { FilterSchedules } from './dto/filter-schedules.dto';
 
 @ApiBearerAuth()
 @Controller('schedules')
@@ -24,8 +26,8 @@ export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
   @Get()
-  get() {
-    return this.scheduleService.findAll();
+  get(@Query() params: FilterSchedules) {
+    return this.scheduleService.findAll(params);
   }
 
   @Post('upload')

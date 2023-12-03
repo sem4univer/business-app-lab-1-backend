@@ -21,7 +21,9 @@ export class ScheduleService {
     private routeRepository: Repository<Route>,
   ) {}
 
-  public async findAll(): Promise<Schedule[]> {
+  public async findAll(params): Promise<Schedule[]> {
+    const { airportFrom, airportTo, departureDate, flightNumber } = params;
+
     const schedules = await this.scheduleRepository.find({
       relations: {
         aircraft: true,
@@ -33,6 +35,18 @@ export class ScheduleService {
             country: true,
           },
         },
+      },
+      where: {
+        route: {
+          departureAirport: {
+            name: airportFrom,
+          },
+          arrivalAirport: {
+            name: airportTo,
+          },
+        },
+        date: departureDate,
+        flightNumber,
       },
     });
     return schedules;
@@ -141,4 +155,6 @@ export class ScheduleService {
   ): Promise<UpdateResult> {
     return await this.scheduleRepository.update(id, updateUserDto);
   }
+
+  public
 }
