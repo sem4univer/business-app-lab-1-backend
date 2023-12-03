@@ -13,18 +13,21 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { Multer } from 'multer';
+import { Public } from '../auth/auth.decorators';
 import { ScheduleService } from './schedule.service';
 import { Roles } from '../auth/role/roles.decorators';
 import { RoleName } from '../auth/role/role.enum';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { FilterSchedules } from './dto/filter-schedules.dto';
 
-@ApiBearerAuth()
+// @ApiBearerAuth()
 @Controller('schedules')
 @ApiTags('schedules')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
+  @Public()
   @Get()
   get(@Query() params: FilterSchedules) {
     return this.scheduleService.findAll(params);
@@ -51,7 +54,9 @@ export class ScheduleController {
         validators: [new FileTypeValidator({ fileType: 'csv' })],
       }),
     )
-    file: Express.Multer.File,
+    file: {
+      buffer: Buffer;
+    },
   ) {
     return this.scheduleService.handleCsv(file.buffer);
   }
