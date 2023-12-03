@@ -155,6 +155,4 @@ export class ScheduleService {
   ): Promise<UpdateResult> {
     return await this.scheduleRepository.update(id, updateUserDto);
   }
-
-  public
 }
