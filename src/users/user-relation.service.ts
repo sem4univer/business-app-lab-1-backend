@@ -16,7 +16,6 @@ export class UserRelationService {
   }
 
   public async getAllRoles(): Promise<Role[]> {
-    console.log('getAllRoles');
     return await this.roleRepository.find({
       relations: {
         user: false,

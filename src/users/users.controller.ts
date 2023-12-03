@@ -9,7 +9,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,6 +18,7 @@ import { RoleName } from '../auth/role/role.enum';
 import { UserRelationService } from './user-relation.service';
 
 @ApiBearerAuth()
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -46,7 +47,6 @@ export class UsersController {
   @Get('roles')
   @Roles(RoleName.Admin)
   getAllRoles() {
-    console.log('roles');
     return this.userRelationService.getAllRoles();
   }
 

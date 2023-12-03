@@ -4,7 +4,12 @@ import { DeepPartial, Repository, In } from 'typeorm';
 import { parse } from 'csv-parse/sync';
 
 import { Schedule } from './entities/schedule.entity';
-import { CsvFileLine, columnsName, filterCsvLine } from './schedule.model';
+import {
+  CsvFileLine,
+  columnsName,
+  filterCsvLine,
+  getRoutes,
+} from './schedule.model';
 import { Aircraft } from './entities/aircraft.entity';
 import { Route } from './entities/route.entity';
 import { Airport } from './entities/airport.entity';
@@ -20,7 +25,7 @@ export class ScheduleService {
     private routeRepository: Repository<Route>,
   ) {}
 
-  public async findAll(): Promise<Schedule[]> {
+  public async findAll(): Promise<any[]> {
     const schedules = await this.scheduleRepository.find({
       relations: {
         aircraft: true,
@@ -34,6 +39,11 @@ export class ScheduleService {
         },
       },
     });
+    // return getRoutes(
+    //   schedules,
+    //   schedules[0].route.arrivalAirport.country.id,
+    //   schedules[0].route.arrivalAirport.country.id,
+    // );
     return schedules;
   }
 
@@ -45,18 +55,14 @@ export class ScheduleService {
 
     let { uniqueLines, duplicateCount, invalidLinesCount } =
       filterCsvLine(parsedData);
-    console.log(uniqueLines);
     for (const data of uniqueLines) {
-      console.log(data.action);
       if (data.action === 'ADD') {
-        console.log('1');
         const existedSchedule = await this.scheduleRepository.findOne({
           where: {
             date: data.departureDate,
             flightNumber: data.flightNumber,
           },
         });
-        console.log('existedSchedule', existedSchedule);
         if (existedSchedule) {
           invalidLinesCount++;
           continue;
@@ -66,11 +72,9 @@ export class ScheduleService {
           await this.getSchedulePayload(data),
         );
 
-        console.log('schedule', schedule);
         await this.scheduleRepository.save(schedule);
         continue;
       }
-      console.log('2');
       const existedSchedule = await this.scheduleRepository.findOne({
         where: {
           date: data.departureDate,
@@ -84,8 +88,6 @@ export class ScheduleService {
           aircraft: true,
         },
       });
-
-      console.log('existedSchedule', existedSchedule);
 
       if (!existedSchedule) {
         invalidLinesCount++;

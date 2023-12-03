@@ -9,14 +9,17 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { Multer } from 'multer';
+import { Public } from '../auth/auth.decorators';
 import { ScheduleService } from './schedule.service';
 
-@ApiBearerAuth()
+// @ApiBearerAuth()
 @Controller('schedules')
 @ApiTags('schedules')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 
+  @Public()
   @Get()
   get() {
     return this.scheduleService.findAll();
@@ -43,7 +46,9 @@ export class ScheduleController {
         validators: [new FileTypeValidator({ fileType: 'csv' })],
       }),
     )
-    file: Express.Multer.File,
+    file: {
+      buffer: Buffer;
+    },
   ) {
     return this.scheduleService.handleCsv(file.buffer);
   }

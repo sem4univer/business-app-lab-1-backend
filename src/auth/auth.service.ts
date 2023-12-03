@@ -32,11 +32,11 @@ export class AuthService {
 
   public async signIn(email: string, password: string) {
     const user = await this.usersService.getCredsByEmail(email);
-    await this.checkLoginTimeForHandle(user);
 
     if (!user) {
       throw new UnauthorizedException();
     }
+    await this.checkLoginTimeForHandle(user);
 
     if (user.password !== getHashedPassword(password)) {
       const timeToWait = await this.updateAndGetTimeToWait(user);
